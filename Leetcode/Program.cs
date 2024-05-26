@@ -65,49 +65,38 @@ internal class Program
 
         var l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
         var l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
-
         Console.WriteLine(AddTwoNumbers(l1, l2));
         //https://leetcode.com/problems/add-two-numbers/description/
         ListNode AddTwoNumbers(ListNode l1, ListNode l2)
         {
-            var result = new ListNode();
+            ListNode dummyHead = new ListNode();
+            ListNode current = dummyHead;
+            int carry = 0;
 
-            var l1Numbers = "";
-            var l2Numbers = "";
-
-
-            do
+            while (l1 != null || l2 != null)
             {
-                l1Numbers += l1.val.ToString();
+                int x = (l1 != null) ? l1.val : 0;
+                int y = (l2 != null) ? l2.val : 0;
 
-                if (l1 != null)
+                int sum = x + y + carry;
+                carry = sum / 10;
+
+                current.next = new ListNode(sum % 10);
+                current = current.next;
+
+                if (l1 != null) 
                     l1 = l1.next;
 
-                l2Numbers += l2.val.ToString();
-
-                if (l2 != null)
+                if (l2 != null) 
                     l2 = l2.next;
-
-            } while (l1 != null && l2 != null);
-
-            var l1Sum = Convert.ToInt32(String.Join("", l1Numbers.Reverse()));
-            var l2Sum = Convert.ToInt32(String.Join("", l2Numbers.Reverse()));
-
-            var SumResult = (l2Sum + l1Sum).ToString().ToCharArray();
-
-            var NextResult = new ListNode();
-
-
-            foreach (var t in SumResult)
-            {
-
-                if (result.val == 0)
-                    result.val = Convert.ToInt32(t.ToString());
-
-                result.next= new ListNode();
             }
 
-            return result;
+            if (carry > 0)
+            {
+                current.next = new ListNode(carry);
+            }
+
+            return dummyHead.next;
         }
 
         Console.ReadKey();
